@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:;"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>黑马记账</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">🐴</span>
+        <div>
+          <h1>黑马记账</h1>
+          <p>记录每一笔，心里更有数</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="button secondary" id="btn-manage-categories" type="button">管理分类</button>
+        <button class="button primary" id="btn-add-record" type="button">＋ 记一笔</button>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="toolbar" aria-label="筛选条件">
+        <label class="field">
+          <span>月份</span>
+          <input id="month-filter" type="month" />
+        </label>
+        <label class="field">
+          <span>一级分类</span>
+          <select id="category-filter">
+            <option value="">全部一级分类</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>二级分类</span>
+          <select id="subcategory-filter" disabled>
+            <option value="">全部二级分类</option>
+          </select>
+        </label>
+        <label class="field grow">
+          <span>搜索备注</span>
+          <input id="keyword-filter" type="search" placeholder="输入备注关键词" />
+        </label>
+        <button class="button ghost" id="btn-clear-filter" type="button">清除筛选</button>
+      </section>
+
+      <section class="summary" aria-label="汇总">
+        <div class="summary-card">
+          <span>筛选结果总支出</span>
+          <strong id="total-amount">¥0.00</strong>
+        </div>
+        <div class="summary-card">
+          <span>记录数</span>
+          <strong id="total-count">0 笔</strong>
+        </div>
+      </section>
+
+      <section class="records-header">
+        <h2>支出记录</h2>
+        <span id="records-meta">共 0 条</span>
+      </section>
+      <section id="records-list" class="records-list" aria-live="polite"></section>
+    </main>
+
+    <footer class="app-footer">
+      <span>数据仅保存在本机，不会上传</span>
+      <span id="data-path" class="data-path"></span>
+    </footer>
+
+    <dialog id="record-dialog" class="dialog">
+      <form id="record-form" class="dialog-body" novalidate>
+        <div class="dialog-header">
+          <h2 id="record-dialog-title">记一笔</h2>
+          <button class="icon-button" id="btn-cancel-record" type="button" aria-label="关闭">×</button>
+        </div>
+        <div class="form-grid">
+          <label class="field">
+            <span>金额（人民币）</span>
+            <input id="record-amount" type="text" inputmode="decimal" placeholder="例如 25.50" autocomplete="off" />
+          </label>
+          <label class="field">
+            <span>日期</span>
+            <input id="record-date" type="date" />
+          </label>
+          <label class="field">
+            <span>一级分类</span>
+            <select id="record-category">
+              <option value="">请选择</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>二级分类</span>
+            <select id="record-subcategory" disabled>
+              <option value="">请选择</option>
+            </select>
+          </label>
+          <label class="field full">
+            <span>备注（可选）</span>
+            <textarea id="record-note" rows="3" maxlength="200" placeholder="例如：和朋友午餐"></textarea>
+          </label>
+        </div>
+        <div class="dialog-actions">
+          <button class="button secondary" id="btn-save-record" type="submit">保存</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="category-dialog" class="dialog">
+      <div class="dialog-body">
+        <div class="dialog-header">
+          <h2>管理分类</h2>
+          <button class="icon-button" id="btn-close-category" type="button" aria-label="关闭">×</button>
+        </div>
+        <div class="category-toolbar">
+          <button class="button secondary" id="btn-add-parent" type="button">＋ 新增一级分类</button>
+          <p>停用分类不会删除历史记录，只会让新记录无法选择它。</p>
+        </div>
+        <div id="category-list" class="category-list"></div>
+        <div class="dialog-actions">
+          <button class="button secondary" id="btn-done-category" type="button">完成</button>
+        </div>
+      </div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>
