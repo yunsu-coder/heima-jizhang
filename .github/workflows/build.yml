@@ -24,7 +24,7 @@ jobs:
       - name: Run tests
         run: npm test
       - name: Build macOS installer
-        run: npm run dist:mac
+        run: npm run dist:mac -- --x64
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
         with:
