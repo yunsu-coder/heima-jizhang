@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require('path');
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain } = require('electron');
 const { LedgerStore } = require('./src/ledger');
 
 let mainWindow = null;
@@ -47,8 +47,14 @@ function registerIpc() {
 app.setName('黑马记账');
 
 app.whenReady().then(async () => {
-  store = new LedgerStore(path.join(app.getPath('userData'), 'ledger.json'));
-  await store.init();
+  try {
+    store = new LedgerStore(path.join(app.getPath('userData'), 'ledger.json'));
+    await store.init();
+  } catch (error) {
+    dialog.showErrorBox('黑马记账', `无法读取本地账单数据：${error.message}`);
+    app.quit();
+    return;
+  }
   registerIpc();
   createWindow();
 
